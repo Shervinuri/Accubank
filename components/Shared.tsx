@@ -1,10 +1,10 @@
 import React from 'react';
 
 export const Toast = ({ message }: { message: string }) => (
-  <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 animate-[slideUp_0.3s_ease-out]">
+  <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 animate-[slideUp_0.3s_ease-out] w-max max-w-[90vw]">
     <div className="bg-white/10 backdrop-blur-md text-white px-6 py-3 rounded-full shadow-2xl border border-white/20 flex items-center gap-3">
       <i className="fa-solid fa-check-circle text-green-400"></i>
-      <span className="font-bold text-sm font-mono">{message}</span>
+      <span className="font-bold text-sm font-mono truncate">{message}</span>
     </div>
   </div>
 );
@@ -51,8 +51,8 @@ export const Button = ({ onClick, children, variant = 'primary', className = '',
   );
 };
 
-export const Card: React.FC<{ children?: React.ReactNode; className?: string }> = ({ children, className = '' }) => (
-  <div className={`bg-[#18181b] border border-[#27272a] rounded-xl p-4 shadow-sm ${className}`}>
+export const Card: React.FC<{ children?: React.ReactNode; className?: string; noPadding?: boolean }> = ({ children, className = '', noPadding = false }) => (
+  <div className={`bg-[#18181b] border border-[#27272a] rounded-xl shadow-sm ${noPadding ? '' : 'p-4'} ${className}`}>
     {children}
   </div>
 );

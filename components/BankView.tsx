@@ -268,11 +268,11 @@ export const BankView = ({ showToast }: { showToast: (msg: string) => void }) =>
           این بخش شامل لیستی از اکانت‌های عمومی <strong>Express VPN</strong> است که برای تست سلامت کلاینت‌ها گردآوری شده‌اند. برای استفاده، روی ایمیل یا پسورد کلیک کنید تا کپی شود.
       </GuideBox>
 
-      {/* Controls - Convex Buttons */}
-      <div className="flex gap-3 mb-6 p-1">
+      {/* Controls - Responsive Grid */}
+      <div className="grid grid-cols-2 gap-3 mb-6 p-1">
         <button 
           onClick={() => setFilter('all')}
-          className={`px-6 py-3 rounded-xl text-xs font-black font-mono tracking-widest transition-all transform active:scale-95 duration-200 border-b-4 ${
+          className={`py-3 rounded-xl text-xs font-black font-mono tracking-widest transition-all transform active:scale-95 duration-200 border-b-4 ${
             filter === 'all' 
             ? 'bg-gradient-to-br from-white to-gray-200 text-black border-gray-300 shadow-[0_4px_12px_rgba(255,255,255,0.2),inset_0_-2px_0_rgba(0,0,0,0.05)]' 
             : 'bg-transparent text-gray-500 border-gray-800 hover:border-gray-600 hover:text-gray-300'
@@ -282,7 +282,7 @@ export const BankView = ({ showToast }: { showToast: (msg: string) => void }) =>
         </button>
         <button 
           onClick={() => setFilter('fav')}
-          className={`px-6 py-3 rounded-xl text-xs font-black font-mono tracking-widest transition-all transform active:scale-95 duration-200 border-b-4 ${
+          className={`py-3 rounded-xl text-xs font-black font-mono tracking-widest transition-all transform active:scale-95 duration-200 border-b-4 ${
             filter === 'fav' 
             ? 'bg-gradient-to-br from-[#1a1a1a] to-black text-yellow-500 border-yellow-600/50 shadow-[0_4px_12px_rgba(234,179,8,0.1),inset_0_1px_0_rgba(255,255,255,0.1)]' 
             : 'bg-transparent text-gray-500 border-gray-800 hover:border-gray-600 hover:text-gray-300'
@@ -301,7 +301,7 @@ export const BankView = ({ showToast }: { showToast: (msg: string) => void }) =>
           const isFullyTried = isEmailCopied && isPassCopied;
 
           return (
-            <Card key={idx} className={`relative overflow-visible group flex flex-row p-0 transition-colors ${isFullyTried ? 'border-gray-700 bg-[#0f0f11]' : ''}`}>
+            <Card key={idx} noPadding={true} className={`relative overflow-visible group flex flex-row transition-colors ${isFullyTried ? 'border-gray-700 bg-[#0f0f11]' : ''}`}>
               
               {/* Plaque / Tag for Index */}
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#1a1a1a] border-x border-b border-white/10 px-4 py-1 rounded-b-lg shadow-[0_4px_10px_rgba(0,0,0,0.5)] z-20">
@@ -310,44 +310,44 @@ export const BankView = ({ showToast }: { showToast: (msg: string) => void }) =>
 
               {/* Tested Vertical Strip (Right Side in RTL) */}
               {isFullyTried && (
-                  <div className="w-8 bg-[#1a1a1a] border-l border-white/5 flex items-center justify-center shadow-inner rounded-r-xl">
+                  <div className="w-8 shrink-0 bg-[#1a1a1a] border-l border-white/5 flex items-center justify-center shadow-inner rounded-r-xl">
                       <span className="text-[10px] text-green-500 font-black tracking-wider [writing-mode:vertical-rl] rotate-180 whitespace-nowrap py-4 drop-shadow-[0_0_5px_rgba(34,197,94,0.3)]">
                           امتحان شده
                       </span>
                   </div>
               )}
 
-              <div className="flex-1 flex flex-col gap-3 relative z-10 p-5 pt-6">
+              <div className="flex-1 min-w-0 flex flex-col gap-3 relative z-10 p-4 pt-6 md:p-5 md:pt-6">
                 
                 {/* Email Row */}
                 <div 
                   onClick={() => handleCopy(acc.u, 'email', acc.u)}
-                  className={`border border-white/5 p-4 rounded-xl flex justify-between items-center cursor-pointer hover:border-blue-500/50 hover:bg-white/5 transition-all active:scale-[0.99] shadow-inner ${isEmailCopied ? 'bg-[#050505]' : 'bg-[#0a0a0a]'}`}
+                  className={`border border-white/5 p-3 md:p-4 rounded-xl flex justify-between items-center cursor-pointer hover:border-blue-500/50 hover:bg-white/5 transition-all active:scale-[0.99] shadow-inner ${isEmailCopied ? 'bg-[#050505]' : 'bg-[#0a0a0a]'}`}
                 >
-                  <div className="overflow-hidden">
-                    <span className="text-[9px] text-gray-600 font-black uppercase tracking-widest mb-1 block">USERNAME</span>
-                    <span className={`font-mono text-sm truncate block tracking-tight transition-colors ${isEmailCopied ? 'text-[#333]' : 'text-gray-200'}`}>
+                  <div className="flex-1 min-w-0 pr-3 overflow-hidden">
+                    <span className="text-[9px] text-gray-600 font-black uppercase tracking-widest mb-1 block text-left">USERNAME</span>
+                    <span dir="ltr" className={`font-mono text-xs md:text-sm truncate block tracking-tight text-left transition-colors ${isEmailCopied ? 'text-[#333]' : 'text-gray-200'}`}>
                         {acc.u}
                     </span>
                   </div>
-                  <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-gray-600 group-hover:text-blue-400 transition-colors">
+                  <div className="w-8 h-8 shrink-0 rounded-full bg-white/5 flex items-center justify-center text-gray-600 group-hover:text-blue-400 transition-colors">
                       <i className={`fa-regular ${isEmailCopied ? 'fa-circle-check text-blue-900' : 'fa-copy'}`}></i>
                   </div>
                 </div>
 
                 {/* Password Row */}
-                <div className="flex gap-3">
+                <div className="flex gap-2 md:gap-3">
                    <div 
                     onClick={() => handleCopy(acc.p, 'pass', acc.u)}
-                    className={`flex-1 border border-white/5 p-4 rounded-xl flex justify-between items-center cursor-pointer hover:border-green-500/50 hover:bg-white/5 transition-all active:scale-[0.99] shadow-inner ${isPassCopied ? 'bg-[#050505]' : 'bg-[#0a0a0a]'}`}
+                    className={`flex-1 min-w-0 border border-white/5 p-3 md:p-4 rounded-xl flex justify-between items-center cursor-pointer hover:border-green-500/50 hover:bg-white/5 transition-all active:scale-[0.99] shadow-inner ${isPassCopied ? 'bg-[#050505]' : 'bg-[#0a0a0a]'}`}
                   >
-                    <div className="overflow-hidden">
-                      <span className="text-[9px] text-gray-600 font-black uppercase tracking-widest mb-1 block">PASSWORD</span>
-                      <span className={`font-mono text-sm font-bold truncate block tracking-wider transition-colors ${isPassCopied ? 'text-[#333]' : 'text-white'}`}>
+                    <div className="flex-1 min-w-0 pr-3 overflow-hidden">
+                      <span className="text-[9px] text-gray-600 font-black uppercase tracking-widest mb-1 block text-left">PASSWORD</span>
+                      <span dir="ltr" className={`font-mono text-xs md:text-sm font-bold truncate block tracking-wider text-left transition-colors ${isPassCopied ? 'text-[#333]' : 'text-white'}`}>
                           {acc.p}
                       </span>
                     </div>
-                    <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-gray-600 group-hover:text-green-400 transition-colors">
+                    <div className="w-8 h-8 shrink-0 rounded-full bg-white/5 flex items-center justify-center text-gray-600 group-hover:text-green-400 transition-colors">
                         <i className={`fa-solid ${isPassCopied ? 'fa-circle-check text-green-900' : 'fa-key'}`}></i>
                     </div>
                   </div>
@@ -355,13 +355,13 @@ export const BankView = ({ showToast }: { showToast: (msg: string) => void }) =>
                   {/* Fav Button */}
                   <button 
                     onClick={() => toggleFav(acc.u)}
-                    className={`w-14 rounded-xl border flex items-center justify-center transition-all active:scale-95 shadow-lg ${
+                    className={`w-12 md:w-14 shrink-0 rounded-xl border flex items-center justify-center transition-all active:scale-95 shadow-lg ${
                         isFav 
                         ? 'bg-yellow-500/10 border-yellow-500/50 text-yellow-500 shadow-[0_0_15px_rgba(234,179,8,0.2)]' 
                         : 'bg-[#0a0a0a] border-white/5 text-gray-700 hover:text-white hover:border-white/20'
                     }`}
                   >
-                    <i className={`${isFav ? 'fa-solid' : 'fa-regular'} fa-star text-lg`}></i>
+                    <i className={`${isFav ? 'fa-solid' : 'fa-regular'} fa-star text-base md:text-lg`}></i>
                   </button>
                 </div>
 
