@@ -16,16 +16,25 @@ export const ScraperView = ({ showToast }: { showToast: (msg: string) => void })
   const fetchPage = async (url: string) => {
     const proxies = [
         "https://api.allorigins.win/raw?url=",
+        "https://api.codetabs.com/v1/proxy?quest=",
         "https://corsproxy.io/?",
         "https://thingproxy.freeboard.io/fetch/"
     ];
     
-    for (const proxy of proxies) {
+    for (let j = 0; j < proxies.length; j++) {
+        const proxy = proxies[j];
         try {
-            const res = await fetch(proxy + encodeURIComponent(url));
+            const controller = new AbortController();
+            const id = setTimeout(() => controller.abort(), 7000); // 7s timeout
+            const res = await fetch(proxy + encodeURIComponent(url), { signal: controller.signal });
+            clearTimeout(id);
             if (res.ok) return await res.text();
-        } catch (e) { console.warn('Proxy failed', proxy); }
+            throw new Error('Status ' + res.status);
+        } catch (e) { 
+            // Silent fail to try next proxy
+        }
     }
+    addLog('Error: All proxies failed.');
     return null;
   };
 
@@ -48,7 +57,10 @@ export const ScraperView = ({ showToast }: { showToast: (msg: string) => void })
         addLog(`Scanning Page [${i + 1}/${maxPages}]...`);
         try {
             const html = await fetchPage(nextUrl);
-            if (!html) throw new Error('Fetch failed');
+            if (!html) {
+                addLog('Failed to fetch page content. Stopping.');
+                break;
+            }
 
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');

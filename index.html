@@ -561,13 +561,27 @@
             const addLog = (msg) => setLogs(prev => [...prev, `> ${msg}`].slice(-8));
 
             const fetchPage = async (url) => {
-                const proxies = ["https://api.allorigins.win/raw?url=", "https://corsproxy.io/?", "https://thingproxy.freeboard.io/fetch/"];
-                for (const proxy of proxies) {
+                const proxies = [
+                    "https://api.allorigins.win/raw?url=",
+                    "https://api.codetabs.com/v1/proxy?quest=",
+                    "https://corsproxy.io/?",
+                    "https://thingproxy.freeboard.io/fetch/"
+                ];
+                
+                for (let j = 0; j < proxies.length; j++) {
+                    const proxy = proxies[j];
                     try {
-                        const res = await fetch(proxy + encodeURIComponent(url));
+                        const controller = new AbortController();
+                        const id = setTimeout(() => controller.abort(), 7000); // 7s timeout
+                        const res = await fetch(proxy + encodeURIComponent(url), { signal: controller.signal });
+                        clearTimeout(id);
                         if (res.ok) return await res.text();
-                    } catch (e) { }
+                        throw new Error('Status ' + res.status);
+                    } catch (e) { 
+                         // Silent fail to try next proxy
+                    }
                 }
+                addLog('Error: All proxies failed.');
                 return null;
             };
 
@@ -584,7 +598,10 @@
                     addLog(`Scanning Page [${i + 1}/${depth}]...`);
                     try {
                         const html = await fetchPage(nextUrl);
-                        if (!html) throw new Error('Fetch failed');
+                        if (!html) {
+                           addLog('Failed to fetch page content. Stopping.');
+                           break;
+                        }
                         const parser = new DOMParser();
                         const doc = parser.parseFromString(html, 'text/html');
                         const messages = doc.querySelectorAll('.tgme_widget_message_text');
