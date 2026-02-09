@@ -519,11 +519,11 @@
                         const isFullyTried = isEmailCopied && isPassCopied;
 
                         return (
-                            <Card key={idx} noPadding={true} className={`relative overflow-visible group flex flex-row transition-colors ${isFullyTried ? 'border-gray-700 bg-[#0f0f11]' : ''}`}>
+                            <Card key={idx} noPadding={true} className={`relative overflow-visible group flex flex-row transition-colors w-full max-w-full ${isFullyTried ? 'border-gray-700 bg-[#0f0f11]' : ''}`}>
                                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#1a1a1a] border-x border-b border-white/10 px-4 py-1 rounded-b-lg shadow-lg z-20"><span className="text-[10px] font-black font-mono text-gray-500 tracking-widest">#{idx + 1}</span></div>
                                 {isFullyTried && <div className="w-8 shrink-0 bg-[#1a1a1a] border-l border-white/5 flex items-center justify-center shadow-inner rounded-r-xl"><span className="text-[10px] text-green-500 font-black tracking-wider [writing-mode:vertical-rl] rotate-180 py-4">امتحان شده</span></div>}
                                 <div className="flex-1 min-w-0 flex flex-col gap-3 relative z-10 p-4 pt-6 md:p-5 md:pt-6">
-                                    <div onClick={() => handleCopy(acc.u, 'email', acc.u)} className={`border border-white/5 p-3 rounded-xl flex justify-between items-center cursor-pointer hover:bg-white/5 transition-all active:scale-[0.99] shadow-inner ${isEmailCopied ? 'bg-[#050505]' : 'bg-[#0a0a0a]'}`}>
+                                    <div onClick={() => handleCopy(acc.u, 'email', acc.u)} className={`border border-white/5 p-3 rounded-xl flex justify-between items-center cursor-pointer hover:bg-white/5 transition-all active:scale-[0.99] shadow-inner select-none ${isEmailCopied ? 'bg-[#050505]' : 'bg-[#0a0a0a]'}`}>
                                         <div className="flex-1 min-w-0 pr-3 overflow-hidden">
                                             <span className="text-[9px] text-gray-600 font-black uppercase tracking-widest mb-1 block text-right">USERNAME</span>
                                             <span dir="ltr" className={`font-mono text-xs md:text-sm truncate block tracking-tight text-right transition-colors ${isEmailCopied ? 'text-[#333]' : 'text-gray-200'}`}>{acc.u}</span>
@@ -531,7 +531,7 @@
                                         <div className="w-8 h-8 shrink-0 rounded-full bg-white/5 flex items-center justify-center text-gray-600"><i className={`fa-regular ${isEmailCopied ? 'fa-circle-check text-blue-900' : 'fa-copy'}`}></i></div>
                                     </div>
                                     <div className="flex gap-2">
-                                        <div onClick={() => handleCopy(acc.p, 'pass', acc.u)} className={`flex-1 min-w-0 border border-white/5 p-3 rounded-xl flex justify-between items-center cursor-pointer hover:bg-white/5 transition-all active:scale-[0.99] shadow-inner ${isPassCopied ? 'bg-[#050505]' : 'bg-[#0a0a0a]'}`}>
+                                        <div onClick={() => handleCopy(acc.p, 'pass', acc.u)} className={`flex-1 min-w-0 border border-white/5 p-3 rounded-xl flex justify-between items-center cursor-pointer hover:bg-white/5 transition-all active:scale-[0.99] shadow-inner select-none ${isPassCopied ? 'bg-[#050505]' : 'bg-[#0a0a0a]'}`}>
                                             <div className="flex-1 min-w-0 pr-3 overflow-hidden">
                                                 <span className="text-[9px] text-gray-600 font-black uppercase tracking-widest mb-1 block text-right">PASSWORD</span>
                                                 <span dir="ltr" className={`font-mono text-xs md:text-sm font-bold truncate block tracking-wider text-right transition-colors ${isPassCopied ? 'text-[#333]' : 'text-white'}`}>{acc.p}</span>
