@@ -19,7 +19,7 @@ export default function App() {
   return (
     <div className="min-h-screen flex flex-col bg-[#0f0f11] font-sans selection:bg-white selection:text-black">
       {/* Header */}
-      <header className="w-full bg-[#0f0f11] border-b border-[#27272a] pt-6 pb-4">
+      <header className="w-full bg-[#0f0f11] border-b border-[#27272a] pt-6 pb-4 sticky top-0 z-50 backdrop-blur-md bg-[#0f0f11]/80">
         <div className="max-w-4xl mx-auto px-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-black text-xl shadow-lg shadow-white/5">
@@ -41,14 +41,15 @@ export default function App() {
       <Navbar activeView={activeView} onViewChange={setActiveView} />
 
       {/* Main Content */}
-      <main className="flex-1 w-full max-w-2xl mx-auto px-4 pb-12">
-        <div className={`transition-all duration-300 ${activeView === 'bank' ? 'opacity-100 translate-y-0' : 'hidden opacity-0 translate-y-4'}`}>
+      <main className="flex-1 w-full max-w-2xl mx-auto px-4 pb-12 relative">
+        {/* We use 'hidden' instead of conditional rendering to preserve state (like scraper logs) when switching tabs */}
+        <div className={activeView === 'bank' ? 'block animate-fade-in' : 'hidden'}>
           <BankView showToast={showToast} />
         </div>
-        <div className={`transition-all duration-300 ${activeView === 'scraper' ? 'opacity-100 translate-y-0' : 'hidden opacity-0 translate-y-4'}`}>
+        <div className={activeView === 'scraper' ? 'block animate-fade-in' : 'hidden'}>
           <ScraperView showToast={showToast} />
         </div>
-        <div className={`transition-all duration-300 ${activeView === 'cleaner' ? 'opacity-100 translate-y-0' : 'hidden opacity-0 translate-y-4'}`}>
+        <div className={activeView === 'cleaner' ? 'block animate-fade-in' : 'hidden'}>
           <CleanerView showToast={showToast} />
         </div>
       </main>

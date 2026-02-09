@@ -1,12 +1,19 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl" class="dark">
-  <head>
+<head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
     <title>SHΞN™ Ultimate Tool</title>
+    
+    <!-- Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Configuration -->
     <script>
       tailwind.config = {
         darkMode: 'class',
@@ -30,6 +37,18 @@
             },
             animation: {
               'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'fade-in': 'fadeIn 0.5s ease-out',
+              'slideUp': 'slideUp 0.3s ease-out',
+            },
+            keyframes: {
+              fadeIn: {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' },
+              },
+              slideUp: {
+                '0%': { transform: 'translate(-50%, 20px)', opacity: '0' },
+                '100%': { transform: 'translate(-50%, 0)', opacity: '1' },
+              }
             }
           }
         }
@@ -42,13 +61,12 @@
         -webkit-tap-highlight-color: transparent;
         overflow-x: hidden;
       }
-      /* Custom Scrollbar */
       ::-webkit-scrollbar { width: 4px; height: 4px; }
       ::-webkit-scrollbar-track { background: #18181b; }
       ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 2px; }
       ::-webkit-scrollbar-thumb:hover { background: #52525b; }
     </style>
-  <script type="importmap">
+<script type="importmap">
 {
   "imports": {
     "react": "https://esm.sh/react@^19.2.4",
@@ -60,8 +78,674 @@
 }
 </script>
 </head>
-  <body>
+<body>
     <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
-  </body>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // ----------------------------------------------------------------------
+        // 1. DATA & UTILS
+        // ----------------------------------------------------------------------
+
+        const STATIC_ACCOUNTS = [
+            {u: "michael.mcgoldrick78@gmail.com", p: "QuantumLeap13%"},
+            {u: "marceljoosten93@gmail.com", p: "MJoosten93."},
+            {u: "pmitchel@verizon.net", p: "Beth1123!"},
+            {u: "lnoeding@gmail.com", p: "Coco1959!"},
+            {u: "cshaposka@gmail.com", p: "Aiden214!"},
+            {u: "aberlanga831@gmail.com", p: "Dalla$15"},
+            {u: "aaron.vanvynckt@yahoo.com", p: "420Money$"},
+            {u: "jeremy@jth1.com", p: "H1lfiger1!"},
+            {u: "mika-mico@hotmail.com", p: "lamer123A!"},
+            {u: "kennedy.brns@gmail.com", p: "Bentley123!"},
+            {u: "lisa.em@outlook.de", p: "Ipodtouch1!"},
+            {u: "annamfrost@mac.com", p: "Derfor01"},
+            {u: "mdieterk@gmail.com", p: "Mandc1876"},
+            {u: "jglosser27@gmail.com", p: "Arizong27!"},
+            {u: "rabunali1@icloud.com", p: "Pizzaservice1!"},
+            {u: "robert.iadanza@gmail.com", p: "N0t4U2c!"},
+            {u: "nishant.dey.purkayastha@gmail.com", p: "Edmundian@1988"},
+            {u: "aquill.page@yahoo.com", p: "page91Bravo!"},
+            {u: "dbsrlgh007@naver.com", p: "Gmfrqor4167!"},
+            {u: "andrew.saffin@gmail.com", p: "Iggypop2"},
+            {u: "jkdpfs62@hotmail.com", p: "Soulmate2017$"},
+            {u: "wm5382@gmail.com", p: "$WMtcm039606"},
+            {u: "m41vmnt@bomnet.net", p: "EO5R4FBU2QTUYTVKK8WCTBD"},
+            {u: "liz50shauu@meocon.org", p: "ET2DMXF4JTOI5NNZIRK4BDW"},
+            {u: "jesserussell45@gmail.com", p: "45Bigtoe!"},
+            {u: "victorwz@126.com", p: "19760726-wz"},
+            {u: "mangdazfju@okiae.com", p: "ECCHXFK5RDY6O4FUFHK2KN8"},
+            {u: "wjgrayson1118@gmail.com", p: "$Wgr8ys0n"},
+            {u: "rwarffuel@gmail.com", p: "@warffuel0"},
+            {u: "bhulsern@gmail.com", p: "Nurse710*"},
+            {u: "marya.moshfegh@gmail.com", p: "@Moshma270683"},
+            {u: "joshnick00@gmail.com", p: "Jmatthew1282$"},
+            {u: "STUART.QUINTAL@gmail.com", p: "Cher0k31@"},
+            {u: "bird4626@gmail.com", p: "jo890217@0217"},
+            {u: "petreig@hotmail.com", p: "Piccolino1!"},
+            {u: "mikwors@sky.com", p: "Raider11!"},
+            {u: "jbutcher2016@gmail.com", p: "Greenhoop1!"},
+            {u: "hajri_sg@hotmail.com", p: "19891663sg55"},
+            {u: "radiolouis@gmail.com", p: "Drocourt62!"},
+            {u: "binnybaker@me.com", p: "walker133"},
+            {u: "noseelol.mc@gmail.com", p: "Smokekiki1!"},
+            {u: "zhangjay1992@gmail.com", p: "Xz920202!!"},
+            {u: "laxmanjtb@aol.com", p: "Ekajrox2311!"},
+            {u: "rhysojanssen@gmail.com", p: "Getsmart18!"},
+            {u: "ngomule@yahoo.com", p: "Pinknest@358"},
+            {u: "leej49@gmail.com", p: "Password1!"},
+            {u: "mercieralexa@gmail.com", p: "Goaggies!23"},
+            {u: "Mattalex172@gmail.com", p: "Bluestar2!"},
+            {u: "olivier.brittney@gmail.com", p: "M@cbeth24"},
+            {u: "sschembri83@gmail.com", p: "Anasf_1983"},
+            {u: "fshnthervr27@yahoo.com", p: "Kelsey1127@"},
+            {u: "eg.design88@gmail.com", p: "Eg8325943068!"},
+            {u: "lorival64100@gmail.com", p: "pnm3425D@"},
+            {u: "kuczajgm@gmail.com", p: "Goettke1!"},
+            {u: "lapat1984@gmail.com", p: "Nj152755$$J"},
+            {u: "rnation87@gmail.com", p: "Rn@tion21"},
+            {u: "bryantomko840@gmail.com", p: "Kellanj840!"},
+            {u: "expressvpn.accgirr@gmail.com", p: "Bia2@AccGirr"},
+            {u: "webmaster.karthik@gmail.com", p: "Ksaurjti@77"},
+            {u: "vdhan333@gmail.com", p: "VVidhan123!!"},
+            {u: "truunderground185@gmail.com", p: "NoAccess4You$"},
+            {u: "aungshine35@gmail.com", p: "Blackshotcf1@"},
+            {u: "weiricnip@gmail.com", p: "niptianyu88!"},
+            {u: "garrett.manasco@gmail.com", p: "Denver18!"},
+            {u: "murray.hayden21@gmail.com", p: "Vulnerablel!"},
+            {u: "prashant.thankachan@gmail.com", p: "Ecologye74$"},
+            {u: "yves.gaming@gmail.com", p: "Suisse99!"},
+            {u: "manjunath@mysmindia.com", p: "Manju@1986"},
+            {u: "mamounbelbachir@hotmail.com", p: "Mams1234$"},
+            {u: "deannec_90@hotmail.com", p: "Donald23!"},
+            {u: "denewbie@hotmail.com", p: "P@ssw0rd"},
+            {u: "djptp11@hotmail.com", p: "Patrick11"},
+            {u: "dark_wolf.0@hotmail.com", p: "Batman123!"},
+            {u: "vedant_gupta_91@hotmail.com", p: "Italianpizza1!"},
+            {u: "suave_0@hotmail.com", p: "AndreW!&07"},
+            {u: "pbeatz2k10@gmail.com", p: "Backyard2019!"},
+            {u: "birdycatalano@hotmail.com", p: "Birdycat99!"},
+            {u: "brue81@hotmail.no", p: "4@Howells"},
+            {u: "cambrake3@hotmail.com", p: "thebest1."},
+            {u: "camerone52@hotmail.com", p: "gators5220"},
+            {u: "camille.ln@hotmail.com", p: "Camille1!"},
+            {u: "carymcdonald@hotmail.com", p: "Friday13!"},
+            {u: "catherinegomis@hotmail.com", p: "Whatamango_01"},
+            {u: "ron.j.acosta@gmail.com", p: "Acosta2261!"},
+            {u: "christie_7000@hotmail.com", p: "Brazer77!"},
+            {u: "n8fisher1234@gmail.com", p: "Fishtwins11!"},
+            {u: "carymcdonald@hotmail.com", p: "Siseles14!"},
+            {u: "christophmitph@hotmail.com", p: "ChrHol327#"},
+            {u: "lizjperl@gmail.com", p: "Siouxsie123!!"},
+            {u: "Jason.mulligan@gmail.com", p: "Marklar1!"},
+            {u: "kievoa@yahookuu.id", p: "EVNYGTQ5X62E7DCNNXU7ZOB"},
+            {u: "cadentjohnson04@gmail.com", p: "Bisd888810!"},
+            {u: "sambeee@modujoa.com", p: "Express@A8285"},
+            {u: "pamela@socialpop.com", p: "Mirandas534!"},
+            {u: "pietro.gendotti@gmail.com", p: "W3sG3m22$"},
+            {u: "amsdenje@gmail.com", p: "Angel841!"},
+            {u: "jne468@gmail.com", p: "Drpepper7!"},
+            {u: "oznakowanie@lukam.com.pl", p: "Sloneczko1!"},
+            {u: "oakleybunce@gmail.com", p: "Guzman32%"},
+            {u: "zayherrera77@gmail.com", p: "Isaiah5823!"},
+            {u: "trussler2303@gmail.com", p: "IamTrent23!"},
+            {u: "richvitkas@gmail.com", p: "ziuronys72"},
+            {u: "soulsmith93@gmail.com", p: "gorillaz9"},
+            {u: "zeynep1yavuz@yahoo.de", p: "Sinop57!"},
+            {u: "moumita.hanra@gmail.com", p: "Mhmhsh23!"},
+            {u: "eetu.e.vierinen@gmail.com", p: "K@tinkontti123"},
+            {u: "krfenemor@hotmail.com", p: "Daisies20"},
+            {u: "annika-ozi@outlook.com", p: "ameroula!26"},
+            {u: "badthiliono27@gmail.com", p: "Palecroot9!"},
+            {u: "muthu.kmr9100@gmail.com", p: "Darkness@13"},
+            {u: "raeganlee16@gmail.com", p: "Rlee2016!"},
+            {u: "anderalex13@gmail.com", p: "Alexander161!"},
+            {u: "deanit@aol.com", p: "Avalanche42!"},
+            {u: "vj1060@gmail.com", p: "ASutter24!"},
+            {u: "athina03@hotmail.com", p: "Ath0306!"},
+            {u: "rgibbs5169@yahoo.com", p: "Butterfly1!"},
+            {u: "baldlemon17@gmail.com", p: "108003774Ee!"},
+            {u: "wally.claassen@gmail.com", p: "Proactive1!!"},
+            {u: "jczeban@nyc.rr.com", p: "305_Lesli3"},
+            {u: "hinsonlau@gmail.com", p: "Hsl198384!"},
+            {u: "nkharybina@nanopools.info", p: "Express@A8285"},
+            {u: "alexvannoyd@gmail.com", p: "Ciocolata.88"},
+            {u: "tomhill1978@outlook.com", p: "Chester#01"},
+            {u: "neerajdana9@gmail.com", p: "Neeraj@1234"},
+            {u: "jamesabigale12@gmail.com", p: "Lollol123!"},
+            {u: "laluvaswani@gmail.com", p: "OmSaiRam108*"},
+            {u: "eternity202@outlook.com", p: "Silent202**"},
+            {u: "petersonjace80@gmail.com", p: "Starside22!"},
+            {u: "owenrichards662@gmail.com", p: "634ne3eE!"},
+            {u: "arthurhalbeck@yahoo.com", p: "Godzilla@12"},
+            {u: "dean1113@live.com", p: "vipers23!"},
+            {u: "blunt_sq_manhunt@hidmail.org", p: "822688524"},
+            {u: "mamanil512@tasiw.com", p: "EK3NF729UTTPDKX6TFKMM5D"},
+            {u: "jean.francois.beutin@gmail.com", p: "Leabeut10?"},
+            {u: "sdrehbein@gmail.com", p: "Lovedance123!"},
+            {u: "licakoy396@coswz.com", p: "EPRQ34HJVXLQ4DCMASRK3GX"},
+            {u: "dfj5780@hotmail.com", p: "harper2681"},
+            {u: "mphtkx@gmaiilku.id", p: "Premium@123"},
+            {u: "shivamgulve4@gmail.com", p: "Shivam@0498"},
+            {u: "artemiou1453@gmail.com", p: "Original21!"},
+            {u: "kacis64158@gamening.com", p: "819264873"},
+            {u: "thorbjth@gmail.com", p: "08Usybaf#"},
+            {u: "tscastello@gmail.com", p: "C4Corvette!"},
+            {u: "longhorns12m@gmail.com", p: "Codfish109$"},
+            {u: "cm076807@gmail.com", p: "Rocafirm3!"},
+            {u: "leeknsa@gmail.com", p: "asdeddZ12!"},
+            {u: "mahdipu99@gmail.com", p: "@eeevpn1"},
+            {u: "orlaquirke1@yahoo.co.uk", p: "rio045866068"},
+            {u: "akash.toor14@hotmail.com", p: "Prada14!"},
+            {u: "gorkov@sbb.rs", p: "Samsung1811!"},
+            {u: "almacarolina@hotmail.com", p: "Arre171184#"},
+            {u: "syo1212@outlook.com", p: "Am634454@"},
+            {u: "mbuechel@live.com.au", p: "Boom!e62"},
+            {u: "nortonsl@yahoo.com", p: "Missy2023!!"},
+            {u: "h.namlah@gmail.com", p: "Hamadali1982@@"},
+            {u: "juju1985@protonmail.com", p: "#d%#S76xn5$wvYj"},
+            {u: "alewis6274@hotmail.com", p: "Fishkill2011!"},
+            {u: "MARKVWELLONS@GMAIL.COM", p: "Murray@3512"},
+            {u: "snikivee@gmail.com", p: "Leonard007!"},
+            {u: "ramonavillarreal1@gmail.com", p: "Ramonavi11!"},
+            {u: "zorse12292@gmail.com", p: "GTF0n00b!"},
+            {u: "grosellroman@gmail.com", p: "Eliana23-05"},
+            {u: "theobaern@gmail.com", p: "Pokemon300!"},
+            {u: "eiganokuni@gmail.com", p: "murata8609"},
+            {u: "rkhatibi@gmail.com", p: "fckgwrhqqq"},
+            {u: "haynesstacy22@gmail.com", p: "Dhawonder@6"},
+            {u: "nasonsam@hotmail.com", p: "Tenixtoll1."},
+            {u: "Kumar.medishetty@gmail.com", p: "Goinside@1"},
+            {u: "bruno.lemoine29@wanadoo.fr", p: "Papou1901&"},
+            {u: "torfand@gmail.com", p: "45246449As!"},
+            {u: "andre23454@gmail.com", p: "Nan-aki11"},
+            {u: "supercancel97@gmail.com", p: "uHJr4B3v"},
+            {u: "aduarte@tecnicil.com", p: "Suporte1*1"},
+            {u: "davenewton@pes-global.com", p: "32Britain$"},
+            {u: "unmight_worldly@hidmail.org", p: "377669736"},
+            {u: "seif.odreeks@yahoo.com", p: "Ilovejesus2017+"},
+            {u: "paul.a.gaier@gmail.com", p: "2TaD7uux0s_18"},
+            {u: "allander.nathan@gmail.com", p: "Nick1983#"},
+            {u: "ogpogolobbies@gmail.com", p: "DaculaGeoriga9322$"},
+            {u: "serdarkaya322@gmail.com", p: "Smurfitkappa111!"},
+            {u: "josephogas@gmail.com", p: "Cowboys24!"},
+            {u: "rugyousum@digdig.org", p: "Methodforall321@"},
+            {u: "genuine_o0-logic@hidmail.org", p: "422842317"},
+            {u: "silvablnet@gmail.com", p: "Pepe2020@"},
+            {u: "emhemmed.madi@gmail.com", p: "vesper.20"},
+            {u: "nero912@gmail.com", p: "#Mockba2018"},
+            {u: "workeian123@gmail.com", p: "Scooter15456!"},
+            {u: "lawhan2578@gmail.com", p: "!zmfltm03"},
+            {u: "nunomhr@gmail.com", p: "Sexyandinoit1994."},
+            {u: "dopza86@gmail.com", p: "Qhdks@6974"},
+            {u: "jorge001022@gmail.com", p: "Jorge*pab22"},
+            {u: "bjones2893@gmail.com", p: "Dcshoes01!"},
+            {u: "canteenwallacole@gmail.com", p: "Raptors2004$"},
+            {u: "me.allwin@gmail.com", p: "Seople5757#"},
+            {u: "tashijeshong11@gmail.com", p: "Johnwall2!"},
+            {u: "oussama.bou00@gmail.com", p: "Azerty2525@@@"},
+            {u: "lucasccipriano@gmail.com", p: "Lucas_ca10@"},
+            {u: "defne.colak@gmail.com", p: "Defne648759!"},
+            {u: "hamchoi0103@gmail.com", p: "Minhhai2023@"},
+            {u: "Mattattack473@gmail.com", p: "Fatass001@"},
+            {u: "laimechemohamedelamine85@gmail.com", p: "Nyc2018*"}
+        ];
+
+        const copyToClipboard = async (text) => {
+            try {
+                await navigator.clipboard.writeText(text);
+                return true;
+            } catch (err) {
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand("copy");
+                document.body.removeChild(textArea);
+                return true;
+            }
+        };
+
+        const downloadText = (content, filename) => {
+            const element = document.createElement("a");
+            const file = new Blob([content], {type: 'text/plain'});
+            element.href = URL.createObjectURL(file);
+            element.download = filename;
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        };
+
+        const extractData = (text, mode = 'mixed') => {
+            const results = [];
+            const lines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l);
+            
+            const configPatterns = {
+                vless: /vless:\/\/[a-zA-Z0-9\-_@.:?=&%#\[\]]+/i,
+                vmess: /vmess:\/\/[a-zA-Z0-9\-_@.:?=&%#\[\]]+/i,
+                trojan: /trojan:\/\/[a-zA-Z0-9\-_@.:?=&%#\[\]]+/i,
+                ss: /ss:\/\/[a-zA-Z0-9\-_@.:?=&%#\[\]]+/i,
+                hysteria: /hysteria2?:\/\/[a-zA-Z0-9\-_@.:?=&%#\[\]]+/i,
+                tuic: /tuic:\/\/[a-zA-Z0-9\-_@.:?=&%#\[\]]+/i,
+            };
+
+            const emailRegex = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/i;
+            const junkRegex = /(t\.me|http|www\.|channel|join|id|bot|support|admin|@)/i;
+            const seenContent = new Set();
+
+            if (mode === 'mixed' || mode === 'config') {
+                const words = text.split(/\s+/);
+                words.forEach(word => {
+                    for (const [protocol, regex] of Object.entries(configPatterns)) {
+                        if (regex.test(word)) {
+                            if (!seenContent.has(word)) {
+                                seenContent.add(word);
+                                results.push({ type: 'config', content: word, meta: protocol.toUpperCase() });
+                            }
+                        }
+                    }
+                });
+            }
+
+            if (mode === 'mixed' || mode === 'account') {
+                for (let i = 0; i < lines.length; i++) {
+                    let currentLine = lines[i];
+                    const cleanLine = currentLine.replace(/^(User:|Email:|Username:|E-mail:)\s*/i, "").trim();
+                    const emailMatch = cleanLine.match(emailRegex);
+                    
+                    if (emailMatch) {
+                        const email = emailMatch[0];
+                        if (i + 1 < lines.length) {
+                            let nextLine = lines[i + 1];
+                            if (/^(Pass:|Password:|P:)$/i.test(nextLine)) {
+                                if(i + 2 < lines.length) nextLine = lines[i+2];
+                                else continue;
+                            }
+
+                            const isNextEmail = emailRegex.test(nextLine);
+                            const isNextConfig = Object.values(configPatterns).some(r => r.test(nextLine));
+                            
+                            if (!isNextEmail && !isNextConfig) {
+                                const cleanPass = nextLine.replace(/^(Pass:|Password:|P:)\s*/i, "").trim();
+                                if (cleanPass.length > 3 && !junkRegex.test(cleanPass) && !cleanPass.includes(' ')) {
+                                    const key = `${email}:${cleanPass}`;
+                                    if (!seenContent.has(key)) {
+                                        seenContent.add(key);
+                                        results.push({ type: 'account', content: key, meta: email, extra: cleanPass });
+                                        i++; 
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return results;
+        };
+
+        // ----------------------------------------------------------------------
+        // 2. SHARED COMPONENTS
+        // ----------------------------------------------------------------------
+
+        const Toast = ({ message }) => (
+            <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 animate-[slideUp_0.3s_ease-out] w-max max-w-[90vw]">
+                <div className="bg-white/10 backdrop-blur-md text-white px-6 py-3 rounded-full shadow-2xl border border-white/20 flex items-center gap-3">
+                <i className="fa-solid fa-check-circle text-green-400"></i>
+                <span className="font-bold text-sm font-mono truncate">{message}</span>
+                </div>
+            </div>
+        );
+
+        const SectionHeader = ({ title, icon, subtitle }) => (
+            <div className="mb-6 border-l-4 border-white pl-4 py-1">
+                <div className="flex items-center gap-3 mb-1">
+                <i className={`fa-solid ${icon} text-white text-xl`}></i>
+                <h2 className="text-xl font-black text-white uppercase tracking-tighter">{title}</h2>
+                </div>
+                <p className="text-xs text-gray-400 font-mono">{subtitle}</p>
+            </div>
+        );
+
+        const GuideBox = ({ children }) => (
+            <div className="bg-white/5 border border-white/10 rounded-lg p-4 mb-6 text-xs text-gray-400 leading-relaxed font-sans">
+                <div className="flex items-center gap-2 text-white mb-2 font-bold">
+                    <i className="fa-solid fa-circle-info text-blue-400"></i>
+                    <span>راهنما</span>
+                </div>
+                {children}
+            </div>
+        );
+
+        const Button = ({ onClick, children, variant = 'primary', className = '', disabled = false }) => {
+            const base = "px-4 py-3 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 uppercase tracking-wide disabled:opacity-50 disabled:cursor-not-allowed";
+            const variants = {
+                primary: "bg-gradient-to-br from-white to-gray-200 text-black border-gray-300 border-b-4 shadow-[0_4px_12px_rgba(255,255,255,0.2),inset_0_-2px_0_rgba(0,0,0,0.05)] active:border-b-0 active:translate-y-1 hover:to-white transform",
+                secondary: "bg-transparent border border-gray-600 text-gray-300 hover:border-white hover:text-white active:scale-95",
+                danger: "bg-red-900/20 text-red-400 border border-red-900/50 hover:bg-red-900/40 active:scale-95",
+                ghost: "text-gray-500 hover:text-white bg-transparent active:scale-95",
+                terminal: "bg-black border border-green-900 text-green-500 font-mono hover:bg-green-900/10 hover:border-green-500 active:scale-95"
+            };
+            return (
+                <button onClick={onClick} disabled={disabled} className={`${base} ${variants[variant]} ${className}`}>
+                {children}
+                </button>
+            );
+        };
+
+        const Card = ({ children, className = '', noPadding = false }) => (
+            <div className={`bg-[#18181b] border border-[#27272a] rounded-xl shadow-sm ${noPadding ? '' : 'p-4'} ${className}`}>
+                {children}
+            </div>
+        );
+
+        const Navbar = ({ activeView, onViewChange }) => {
+            const navItems = [
+                { id: 'bank', icon: 'fa-server', label: 'Express Bank' },
+                { id: 'scraper', icon: 'fa-spider', label: 'Scraper' },
+                { id: 'cleaner', icon: 'fa-filter', label: 'Cleaner' },
+            ];
+            return (
+                <div className="w-full bg-[#18181b] border-y border-[#27272a] mb-6">
+                <div className="max-w-4xl mx-auto flex">
+                    {navItems.map((item) => {
+                    const isActive = activeView === item.id;
+                    return (
+                        <button key={item.id} onClick={() => onViewChange(item.id)}
+                        className={`flex-1 py-4 flex flex-col md:flex-row items-center justify-center gap-2 transition-all relative overflow-hidden group outline-none ${isActive ? 'text-white bg-white/5' : 'text-gray-500 hover:text-gray-300 hover:bg-white/[0.02]'}`}>
+                        <i className={`fa-solid ${item.icon} ${isActive ? 'scale-110' : ''} transition-transform`}></i>
+                        <span className="text-xs md:text-sm font-bold font-mono tracking-wider uppercase">{item.label}</span>
+                        {isActive && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-white shadow-[0_0_10px_rgba(255,255,255,0.5)]"></div>}
+                        </button>
+                    );
+                    })}
+                </div>
+                </div>
+            );
+        };
+
+        // ----------------------------------------------------------------------
+        // 3. MAIN VIEWS
+        // ----------------------------------------------------------------------
+
+        const BankView = ({ showToast }) => {
+            const [filter, setFilter] = useState('all');
+            const [state, setState] = useState({ favorites: [], copiedEmails: [], copiedPasses: [] });
+
+            useEffect(() => {
+                const saved = localStorage.getItem('shen_bank_v3');
+                if (saved) setState(JSON.parse(saved));
+            }, []);
+
+            const save = (newState) => {
+                setState(newState);
+                localStorage.setItem('shen_bank_v3', JSON.stringify(newState));
+            };
+
+            const toggleFav = (email) => {
+                const isFav = state.favorites.includes(email);
+                const newFavs = isFav ? state.favorites.filter(e => e !== email) : [...state.favorites, email];
+                save({ ...state, favorites: newFavs });
+            };
+
+            const handleCopy = async (text, type, email) => {
+                await copyToClipboard(text);
+                const typeLabel = type === 'email' ? 'ایمیل' : 'پسورد';
+                showToast(`${typeLabel} کپی شد`);
+                let newState = { ...state };
+                if (type === 'email' && !state.copiedEmails.includes(email)) newState.copiedEmails = [...state.copiedEmails, email];
+                if (type === 'pass' && !state.copiedPasses.includes(email)) newState.copiedPasses = [...state.copiedPasses, email];
+                save(newState);
+            };
+
+            const uniqueAccounts = Array.from(new Map(STATIC_ACCOUNTS.map(item => [item.u, item])).values());
+            const filteredAccounts = filter === 'all' ? uniqueAccounts : uniqueAccounts.filter(acc => state.favorites.includes(acc.u));
+
+            return (
+                <div className="animate-fade-in">
+                <SectionHeader title="EXPRESS VPN BANK" subtitle={`Total Accounts: ${uniqueAccounts.length}`} icon="fa-server" />
+                <GuideBox>این بخش شامل لیستی از اکانت‌های عمومی <strong>Express VPN</strong> است که برای تست سلامت کلاینت‌ها گردآوری شده‌اند. برای استفاده، روی ایمیل یا پسورد کلیک کنید تا کپی شود.</GuideBox>
+                
+                <div className="grid grid-cols-2 gap-3 mb-6 p-1">
+                    <button onClick={() => setFilter('all')} className={`py-3 rounded-xl text-xs font-black font-mono tracking-widest transition-all transform active:scale-95 duration-200 border-b-4 ${filter === 'all' ? 'bg-gradient-to-br from-white to-gray-200 text-black border-gray-300' : 'bg-transparent text-gray-500 border-gray-800'}`}>ALL ACCOUNTS</button>
+                    <button onClick={() => setFilter('fav')} className={`py-3 rounded-xl text-xs font-black font-mono tracking-widest transition-all transform active:scale-95 duration-200 border-b-4 ${filter === 'fav' ? 'bg-gradient-to-br from-[#1a1a1a] to-black text-yellow-500 border-yellow-600/50' : 'bg-transparent text-gray-500 border-gray-800'}`}>FAVORITES <i className="fa-solid fa-star ml-1"></i></button>
+                </div>
+
+                <div className="grid gap-4 mt-8">
+                    {filteredAccounts.map((acc, idx) => {
+                        const isFav = state.favorites.includes(acc.u);
+                        const isEmailCopied = state.copiedEmails.includes(acc.u);
+                        const isPassCopied = state.copiedPasses.includes(acc.u);
+                        const isFullyTried = isEmailCopied && isPassCopied;
+
+                        return (
+                            <Card key={idx} noPadding={true} className={`relative overflow-visible group flex flex-row transition-colors ${isFullyTried ? 'border-gray-700 bg-[#0f0f11]' : ''}`}>
+                                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#1a1a1a] border-x border-b border-white/10 px-4 py-1 rounded-b-lg shadow-lg z-20"><span className="text-[10px] font-black font-mono text-gray-500 tracking-widest">#{idx + 1}</span></div>
+                                {isFullyTried && <div className="w-8 shrink-0 bg-[#1a1a1a] border-l border-white/5 flex items-center justify-center shadow-inner rounded-r-xl"><span className="text-[10px] text-green-500 font-black tracking-wider [writing-mode:vertical-rl] rotate-180 py-4">امتحان شده</span></div>}
+                                <div className="flex-1 min-w-0 flex flex-col gap-3 relative z-10 p-4 pt-6 md:p-5 md:pt-6">
+                                    <div onClick={() => handleCopy(acc.u, 'email', acc.u)} className={`border border-white/5 p-3 rounded-xl flex justify-between items-center cursor-pointer hover:bg-white/5 transition-all active:scale-[0.99] shadow-inner ${isEmailCopied ? 'bg-[#050505]' : 'bg-[#0a0a0a]'}`}>
+                                        <div className="flex-1 min-w-0 pr-3 overflow-hidden">
+                                            <span className="text-[9px] text-gray-600 font-black uppercase tracking-widest mb-1 block text-right">USERNAME</span>
+                                            <span dir="ltr" className={`font-mono text-xs md:text-sm truncate block tracking-tight text-right transition-colors ${isEmailCopied ? 'text-[#333]' : 'text-gray-200'}`}>{acc.u}</span>
+                                        </div>
+                                        <div className="w-8 h-8 shrink-0 rounded-full bg-white/5 flex items-center justify-center text-gray-600"><i className={`fa-regular ${isEmailCopied ? 'fa-circle-check text-blue-900' : 'fa-copy'}`}></i></div>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <div onClick={() => handleCopy(acc.p, 'pass', acc.u)} className={`flex-1 min-w-0 border border-white/5 p-3 rounded-xl flex justify-between items-center cursor-pointer hover:bg-white/5 transition-all active:scale-[0.99] shadow-inner ${isPassCopied ? 'bg-[#050505]' : 'bg-[#0a0a0a]'}`}>
+                                            <div className="flex-1 min-w-0 pr-3 overflow-hidden">
+                                                <span className="text-[9px] text-gray-600 font-black uppercase tracking-widest mb-1 block text-right">PASSWORD</span>
+                                                <span dir="ltr" className={`font-mono text-xs md:text-sm font-bold truncate block tracking-wider text-right transition-colors ${isPassCopied ? 'text-[#333]' : 'text-white'}`}>{acc.p}</span>
+                                            </div>
+                                            <div className="w-8 h-8 shrink-0 rounded-full bg-white/5 flex items-center justify-center text-gray-600"><i className={`fa-solid ${isPassCopied ? 'fa-circle-check text-green-900' : 'fa-key'}`}></i></div>
+                                        </div>
+                                        <button onClick={() => toggleFav(acc.u)} className={`w-12 md:w-14 shrink-0 rounded-xl border flex items-center justify-center transition-all active:scale-95 shadow-lg ${isFav ? 'bg-yellow-500/10 border-yellow-500/50 text-yellow-500' : 'bg-[#0a0a0a] border-white/5 text-gray-700'}`}><i className={`${isFav ? 'fa-solid' : 'fa-regular'} fa-star text-base md:text-lg`}></i></button>
+                                    </div>
+                                </div>
+                            </Card>
+                        );
+                    })}
+                    {filteredAccounts.length === 0 && <div className="text-center py-12 text-gray-600 text-sm border-2 border-dashed border-gray-800 rounded-2xl font-mono uppercase tracking-widest">NO DATA FOUND</div>}
+                </div>
+                </div>
+            );
+        };
+
+        const ScraperView = ({ showToast }) => {
+            const [input, setInput] = useState('');
+            const [depth, setDepth] = useState(5);
+            const [mode, setMode] = useState('config');
+            const [loading, setLoading] = useState(false);
+            const [logs, setLogs] = useState([]);
+            const [results, setResults] = useState([]);
+
+            const addLog = (msg) => setLogs(prev => [...prev, `> ${msg}`].slice(-8));
+
+            const fetchPage = async (url) => {
+                const proxies = ["https://api.allorigins.win/raw?url=", "https://corsproxy.io/?", "https://thingproxy.freeboard.io/fetch/"];
+                for (const proxy of proxies) {
+                    try {
+                        const res = await fetch(proxy + encodeURIComponent(url));
+                        if (res.ok) return await res.text();
+                    } catch (e) { }
+                }
+                return null;
+            };
+
+            const startScan = async () => {
+                if (!input) return;
+                setLoading(true); setResults([]); setLogs([]);
+                let channelName = input.replace('https://t.me/', '').replace('@', '').split('/')[0];
+                if(input.includes('/s/')) channelName = input.split('/s/')[1].split('/')[0];
+                addLog(`INIT: Target ${channelName}`);
+                let nextUrl = `https://t.me/s/${channelName}`;
+                const allItems = []; const seen = new Set();
+
+                for (let i = 0; i < depth; i++) {
+                    addLog(`Scanning Page [${i + 1}/${depth}]...`);
+                    try {
+                        const html = await fetchPage(nextUrl);
+                        if (!html) throw new Error('Fetch failed');
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        const messages = doc.querySelectorAll('.tgme_widget_message_text');
+                        const messageNodes = doc.querySelectorAll('.tgme_widget_message');
+
+                        messages.forEach(msg => {
+                            const text = msg.innerHTML.replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]*>/g, ' ');
+                            const extracted = extractData(text, mode);
+                            extracted.forEach(item => {
+                                if (!seen.has(item.content)) { seen.add(item.content); allItems.push(item); }
+                            });
+                        });
+                        addLog(`Found ${allItems.length} items so far...`);
+                        let minId = Infinity;
+                        messageNodes.forEach((m) => {
+                            const dp = m.getAttribute('data-post');
+                            if (dp) { const id = parseInt(dp.split('/')[1]); if (id < minId) minId = id; }
+                        });
+                        if (minId !== Infinity && minId > 1) nextUrl = `https://t.me/s/${channelName}?before=${minId}`;
+                        else break;
+                        await new Promise(r => setTimeout(r, 800));
+                    } catch (err) { addLog('Error: Connection timed out.'); break; }
+                }
+                setResults(allItems); setLoading(false);
+            };
+
+            const handleDownload = () => {
+                if(results.length === 0) return;
+                const content = results.map(r => r.type === 'account' ? `User: ${r.meta}\nPass: ${r.extra}\n----------------` : r.content).join('\n');
+                downloadText(content, `shen_dump_${mode}_${Date.now()}.txt`);
+            };
+
+            const handleCopyAll = async () => {
+                if(results.length === 0) return;
+                const content = results.map(r => r.type === 'account' ? `User: ${r.meta}\nPass: ${r.extra}` : r.content).join('\n');
+                await copyToClipboard(content);
+                showToast('کل نتایج کپی شد');
+            };
+
+            return (
+                <div className="animate-fade-in">
+                    <SectionHeader title="CHANNEL SCRAPER" subtitle="Advanced Telegram Harvester" icon="fa-spider" />
+                    <GuideBox>
+                        ابتدا <strong>مود اسکرپر</strong> را انتخاب کنید. اگر دنبال اکانت اکسپرس هستید روی Express Account و اگر دنبال کانفیگ V2ray هستید روی Config قرار دهید. 
+                        لینک یا آیدی کانال را وارد کرده، عمق جستجو را تنظیم کنید و استارت بزنید. نتایج به صورت تفکیک شده نمایش داده می‌شوند.
+                    </GuideBox>
+                    <Card className="mb-6 border-gray-800 bg-black/40">
+                        <div className="flex flex-col gap-4">
+                            <div className="grid grid-cols-2 gap-2 bg-black/50 p-1 rounded-xl border border-gray-800">
+                                <button onClick={() => setMode('config')} className={`py-2 rounded-lg text-xs font-bold transition-all ${mode === 'config' ? 'bg-white text-black' : 'text-gray-500'}`}><i className="fa-solid fa-bolt"></i> V2RAY CONFIGS</button>
+                                <button onClick={() => setMode('account')} className={`py-2 rounded-lg text-xs font-bold transition-all ${mode === 'account' ? 'bg-white text-black' : 'text-gray-500'}`}><i className="fa-solid fa-shield-halved"></i> EXPRESS ACCOUNTS</button>
+                            </div>
+                            <div className="flex flex-col gap-4">
+                                <div className="relative"><i className="fa-brands fa-telegram absolute left-4 top-3.5 text-gray-500"></i><input dir="ltr" type="text" placeholder="Target Channel ID (e.g. @ProxyMTProto or https://t.me/...)" value={input} onChange={(e) => setInput(e.target.value)} className="w-full bg-[#111] border border-gray-800 rounded-xl pl-10 pr-4 py-3 text-sm focus:border-white focus:outline-none font-mono text-white placeholder-gray-600" /></div>
+                                <div className="bg-[#111] p-3 rounded-xl border border-gray-800 flex items-center justify-between gap-4">
+                                    <span className="text-xs text-gray-500 font-bold whitespace-nowrap">SCAN DEPTH: <span className="text-white">{depth} Pages</span></span>
+                                    <input type="range" min="1" max="20" step="1" value={depth} onChange={(e) => setDepth(parseInt(e.target.value))} className="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-white" />
+                                </div>
+                            </div>
+                            <Button onClick={startScan} disabled={loading} className="w-full py-4 text-base" variant="primary">{loading ? 'SCANNING...' : 'START HARVEST'}</Button>
+                            <div className="bg-[#050505] rounded-lg p-3 font-mono text-[10px] h-32 overflow-y-auto border border-green-900/30 text-green-500 shadow-inner relative">
+                                <div className="absolute top-2 right-2 flex gap-1"><div className="w-2 h-2 rounded-full bg-red-500/50"></div><div className="w-2 h-2 rounded-full bg-yellow-500/50"></div><div className="w-2 h-2 rounded-full bg-green-500/50"></div></div>
+                                <div className="text-green-500/50 mb-2 border-b border-green-900/30 pb-1">root@shen-tool:~# tail -f /var/log/scraper</div>
+                                {logs.length === 0 ? <span className="text-gray-700 animate-pulse">_waiting_for_command</span> : logs.map((l, i) => <div key={i} className="mb-1">{l}</div>)}
+                            </div>
+                        </div>
+                    </Card>
+                    {results.length > 0 && (
+                        <>
+                        <div className="flex gap-2 mb-4"><Button onClick={handleCopyAll} variant="secondary" className="flex-1 text-xs">Copy All</Button><Button onClick={handleDownload} variant="secondary" className="flex-1 text-xs">Download</Button></div>
+                        <div className="space-y-2 pb-10">{results.map((item, idx) => (
+                            <div key={idx} className="bg-[#18181b] border border-[#27272a] rounded-lg p-3">
+                                {item.type === 'account' ? (
+                                    <div className="flex flex-col gap-2">
+                                        <div className="flex justify-between items-center bg-black/40 p-2 rounded cursor-pointer" onClick={() => {copyToClipboard(item.meta || ""); showToast('Copied');}}><span className="font-mono text-xs text-gray-300 truncate">{item.meta}</span></div>
+                                        <div className="flex justify-between items-center bg-black/40 p-2 rounded cursor-pointer" onClick={() => {copyToClipboard(item.extra || ""); showToast('Copied');}}><span className="font-mono text-xs font-bold text-white truncate">{item.extra}</span></div>
+                                    </div>
+                                ) : (<div className="flex justify-between items-center gap-3"><div className="flex-1 font-mono text-[10px] text-gray-500 truncate">{item.content.substring(0, 40)}...</div><button onClick={() => {copyToClipboard(item.content); showToast('Copied');}} className="text-white"><i className="fa-regular fa-copy"></i></button></div>)}
+                            </div>
+                        ))}</div>
+                        </>
+                    )}
+                </div>
+            );
+        };
+
+        const CleanerView = ({ showToast }) => {
+            const [text, setText] = useState('');
+            const [results, setResults] = useState([]);
+            const [processed, setProcessed] = useState(false);
+
+            const handleProcess = () => { if(!text.trim()) return; const data = extractData(text, 'mixed'); setResults(data); setProcessed(true); showToast(`Found: ${data.length}`); };
+            const handleClear = () => { setText(''); setResults([]); setProcessed(false); };
+            const handleCopyAll = async () => { if(results.length === 0) return; const blob = results.map(r => r.type === 'account' ? `User: ${r.meta}\nPass: ${r.extra}` : r.content).join('\n\n'); await copyToClipboard(blob); showToast('All items copied'); };
+
+            const accounts = results.filter(r => r.type === 'account');
+            const configs = results.filter(r => r.type === 'config');
+
+            return (
+                <div className="animate-fade-in">
+                    <SectionHeader title="DATA REFINERY" subtitle="Cleaner & Extractor Tool" icon="fa-filter" />
+                    <GuideBox>
+                        متن‌های درهم و شلوغ کپی شده از تلگرام یا سایر منابع را اینجا قرار دهید. این ابزار به صورت هوشمند کانفیگ‌ها و اکانت‌های اکسپرس را شناسایی کرده، متون اضافی را حذف می‌کند و لیستی تمیز و مرتب جهت استفاده یا کپی ارائه می‌دهد.
+                    </GuideBox>
+                    <Card className="mb-6 bg-[#111]">
+                        <textarea dir="ltr" className="w-full h-48 bg-[#0a0a0a] border border-[#333] rounded-xl p-4 text-xs font-mono text-gray-300 focus:outline-none focus:border-white resize-none placeholder-gray-600" placeholder="Paste raw content containing V2Ray configs or User:Pass accounts here..." value={text} onChange={(e) => setText(e.target.value)}></textarea>
+                        <div className="grid grid-cols-2 gap-3 mt-4"><Button onClick={handleProcess} variant="primary">START PROCESS</Button><Button onClick={handleClear} variant="secondary">CLEAR DATA</Button></div>
+                    </Card>
+                    {processed && (
+                        <div className="space-y-6 pb-12">
+                            <div className="flex gap-4">
+                                <div className="flex-1 bg-blue-900/10 border border-blue-900/30 p-3 rounded-lg flex flex-col items-center"><span className="text-2xl font-black text-blue-400">{accounts.length}</span><span className="text-[10px] text-blue-300/50 uppercase">Accounts</span></div>
+                                <div className="flex-1 bg-purple-900/10 border border-purple-900/30 p-3 rounded-lg flex flex-col items-center"><span className="text-2xl font-black text-purple-400">{configs.length}</span><span className="text-[10px] text-purple-300/50 uppercase">Configs</span></div>
+                            </div>
+                            {results.length > 0 && <Button onClick={handleCopyAll} variant="secondary" className="w-full text-xs py-3">COPY RESULTS</Button>}
+                            {accounts.length > 0 && <div className="grid gap-2">{accounts.map((acc, i) => <div key={i} className="bg-[#18181b] border border-[#27272a] p-3 rounded-lg"><div onClick={() => copyToClipboard(acc.meta)} className="text-xs text-gray-400 cursor-pointer">{acc.meta}</div><div onClick={() => copyToClipboard(acc.extra)} className="text-xs text-white font-bold cursor-pointer">{acc.extra}</div></div>)}</div>}
+                            {configs.length > 0 && <div className="grid gap-2">{configs.map((conf, i) => <div key={i} className="bg-[#18181b] border border-[#27272a] p-3 rounded-lg flex justify-between"><code className="text-[10px] text-gray-500 truncate w-3/4">{conf.content}</code><button onClick={() => copyToClipboard(conf.content)}><i className="fa-regular fa-copy text-gray-500"></i></button></div>)}</div>}
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        // ----------------------------------------------------------------------
+        // 4. APP ENTRY
+        // ----------------------------------------------------------------------
+
+        function App() {
+            const [activeView, setActiveView] = useState('bank');
+            const [toastMsg, setToastMsg] = useState(null);
+            const showToast = (msg) => { setToastMsg(msg); setTimeout(() => setToastMsg(null), 2000); };
+
+            return (
+                <div className="min-h-screen flex flex-col bg-[#0f0f11] font-sans selection:bg-white selection:text-black">
+                    <header className="w-full bg-[#0f0f11] border-b border-[#27272a] pt-6 pb-4 sticky top-0 z-50 backdrop-blur-md bg-[#0f0f11]/80">
+                        <div className="max-w-4xl mx-auto px-4 flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-black text-xl shadow-lg shadow-white/5"><i className="fa-solid fa-layer-group"></i></div>
+                                <div><h1 className="text-xl font-black tracking-tighter leading-none text-white uppercase">☬SHΞN™ <span className="text-gray-500">ACCUBANKER</span></h1><p className="text-[10px] text-gray-500 font-mono tracking-[0.2em] uppercase mt-1">ULTIMATE TOOLKIT V3.0</p></div>
+                            </div>
+                        </div>
+                    </header>
+                    <Navbar activeView={activeView} onViewChange={setActiveView} />
+                    <main className="flex-1 w-full max-w-2xl mx-auto px-4 pb-12 relative">
+                        <div className={activeView === 'bank' ? 'block animate-fade-in' : 'hidden'}><BankView showToast={showToast} /></div>
+                        <div className={activeView === 'scraper' ? 'block animate-fade-in' : 'hidden'}><ScraperView showToast={showToast} /></div>
+                        <div className={activeView === 'cleaner' ? 'block animate-fade-in' : 'hidden'}><CleanerView showToast={showToast} /></div>
+                    </main>
+                    <footer className="w-full border-t border-[#27272a] bg-[#0a0a0a] py-8 mt-auto">
+                        <div className="max-w-4xl mx-auto text-center">
+                            <p className="text-xs text-gray-600 font-mono mb-2">Developed with precision.</p>
+                            <a href="https://T.me/shervini" target="_blank" className="inline-block text-sm font-bold text-gray-400 hover:text-white transition-colors tracking-widest border border-gray-800 rounded-full px-6 py-2 hover:border-white hover:bg-white/5">☬Exclusive SHΞN™ made</a>
+                        </div>
+                    </footer>
+                    {toastMsg && <Toast message={toastMsg} />}
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
 </html>
